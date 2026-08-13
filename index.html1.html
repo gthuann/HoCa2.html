@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Hồ Cá CSS3</title>
+<style>
+
+:root{
+    --panel-bg: rgba(0,20,35,.55);
+    --panel-border: rgba(255,255,255,.18);
+    --accent: #5dd8ff;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    overflow:hidden;
+    background:#001824;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+#background{
+    width:100vw;
+    height:100vh;
+    position:relative;
+    overflow:hidden;
+    transition: background 1.4s ease;
+    cursor: pointer;
+}
+
+#background.theme-day{
+    background:linear-gradient(to bottom, #5dd8ff 0%, #0084c9 40%, #004b75 100%);
+}
+
+#background.theme-sunset{
+    background:linear-gradient(to bottom, #ffb37a 0%, #ff7d5c 25%, #b8467a 55%, #4a2a72 100%);
+}
+
+#background.theme-night{
+    background:linear-gradient(to bottom, #061a33 0%, #0a2647 40%, #041325 100%);
+}
+
+.light{
+    position:absolute;
+    width:500px;
+    height:500px;
+    background:rgba(255,255,255,.15);
+    border-radius:50%;
+    top:-250px;
+    left:20%;
+    filter:blur(80px);
+    pointer-events:none;
+}
+
+.ray{
+    position:absolute;
+    top:-10%;
+    width:120px;
+    height:140%;
+    background:linear-gradient(to bottom, rgba(255,255,255,.25), rgba(255,255,255,0) 70%);
+    transform:rotate(12deg);
+    filter:blur(6px);
+    pointer-events:none;
+    animation:rayShift 9s ease-in-out infinite alternate;
+    mix-blend-mode:screen;
+}
+@keyframes rayShift{
+    from{ transform:rotate(8deg) translateX(0); opacity:.7; }
+    to{ transform:rotate(16deg) translateX(40px); opacity:.35; }
+}
+
+.theme-night .ray, .theme-sunset .ray{ opacity:.3; }
+
+.star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    background:#fff;
+    border-radius:50%;
+    opacity:0;
+    transition:opacity 1s ease;
+    animation:twinkle 3s ease-in-out infinite;
+}
+.theme-night .star{ opacity:.85; }
+@keyframes twinkle{
+    0%,100%{ opacity:.3; }
+    50%{ opacity:1; }
+}
+
+.moon{
+    position:absolute;
+    top:40px;
+    right:60px;
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    background:#f3f1de;
+    box-shadow:0 0 40px 10px rgba(243,241,222,.5);
+    opacity:0;
+    transition:opacity 1.2s ease;
+    pointer-events:none;
+}
+.theme-night .moon{ opacity:1; }
+
+.sun{
+    position:absolute;
+    top:50px;
+    right:80px;
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    background:radial-gradient(circle, #fff6d0 0%, #ffcf6b 60%, rgba(255,207,107,0) 75%);
+    box-shadow:0 0 60px 20px rgba(255,207,107,.45);
+    opacity:0;
+    transition:opacity 1.2s ease;
+    pointer-events:none;
+}
+.theme-sunset .sun{ opacity:1; top:220px; }
+.theme-day .sun{ opacity:.9; }
+
+.sand{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:130px;
+    background:#d8c28f;
+    transition:background 1.4s ease;
+    z-index:2;
+}
+.theme-night .sand{ background:#4a4130; }
+.theme-sunset .sand{ background:#c99a63; }
+
+.coral{
+    position:absolute;
+    bottom:110px;
+    width:35px;
+    border-radius:20px 20px 4px 4px;
+    z-index:2;
+}
+.red{ height:100px; background:linear-gradient(#ff7a7a,#ff4b4b); }
+.orange{ height:80px; background:linear-gradient(#ffb156,#ff8c00); }
+.purple{ height:90px; background:linear-gradient(#d29bff,#b266ff); }
+.pink{ height:70px; background:linear-gradient(#ffb2e0,#ff6fc4); }
+
+.starfish{
+    position:absolute;
+    bottom:20px;
+    width:34px;
+    height:34px;
+    background:#ff8a3d;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    z-index:2;
+    animation:starWiggle 4s ease-in-out infinite;
+}
+@keyframes starWiggle{
+    0%,100%{ transform:rotate(-6deg); }
+    50%{ transform:rotate(6deg); }
+}
+
+.seaweed{
+    position:absolute;
+    bottom:120px;
+    width:12px;
+    height:170px;
+    background:linear-gradient(#3fae4c, #1f7a2c);
+    border-radius:20px;
+    transform-origin:bottom;
+    animation:wave 3s infinite alternate ease-in-out;
+    z-index:2;
+}
+
+@keyframes wave{
+    from{ transform:rotate(-8deg); }
+    to{ transform:rotate(8deg); }
+}
+
+.bubble{
+    position:absolute;
+    bottom:-50px;
+    border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(255,255,255,.25));
+    animation:up linear infinite;
+    pointer-events:none;
+    z-index:5;
+}
+
+@keyframes up{
+    0%{ transform:translateY(0) translateX(0); opacity:0; }
+    10%{ opacity:1; }
+    50%{ transform:translateY(-55vh) translateX(15px); }
+    100%{ transform:translateY(-110vh) translateX(-10px); opacity:0; }
+}
+
+.fish{
+    position:absolute;
+    width:90px;
+    z-index:6;
+    animation-name: swim;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.fish img{
+    width:100%;
+    display:block;
+}
+
+@keyframes swim{
+    0%{ left:-150px; }
+    100%{ left:110%; }
+}
+
+.jelly{
+    position:absolute;
+    z-index:4;
+    animation: jellyFloat linear infinite;
+    opacity:.85;
+}
+.jelly .dome{
+    width:100%;
+    height:60%;
+    border-radius:50% 50% 45% 45%;
+    background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.9), rgba(200,150,255,.55) 70%);
+    animation: jellyPulse 2s ease-in-out infinite;
+}
+.jelly .tentacles{
+    display:flex;
+    justify-content:space-between;
+    padding:0 8%;
+}
+.jelly .tentacles span{
+    width:8%;
+    height:22px;
+    background:rgba(210,170,255,.55);
+    border-radius:0 0 10px 10px;
+    animation: tentacleWave 1.6s ease-in-out infinite alternate;
+}
+.jelly .tentacles span:nth-child(2){ animation-delay:.2s; }
+.jelly .tentacles span:nth-child(3){ animation-delay:.4s; }
+.jelly .tentacles span:nth-child(4){ animation-delay:.6s; }
+
+@keyframes jellyPulse{
+    0%,100%{ transform:scaleX(1) scaleY(1); }
+    50%{ transform:scaleX(.85) scaleY(1.1); }
+}
+@keyframes tentacleWave{
+    from{ transform:rotate(-8deg); }
+    to{ transform:rotate(8deg); }
+}
+@keyframes jellyFloat{
+    0%{ transform:translateY(0); }
+    50%{ transform:translateY(-40px); }
+    100%{ transform:translateY(0); }
+}
+
+#shark{
+    position:absolute;
+    left:-250px;
+    top:420px;
+    z-index:7;
+    animation: Shark 16s linear infinite;
+    filter:drop-shadow(0 6px 6px rgba(0,0,0,.35));
+}
+
+#shark img{ display:block; }
+
+@keyframes Shark{
+    0%{ left:-250px; top:420px; transform:scaleX(1); }
+    40%{ left:75%; top:350px; transform:scaleX(1); }
+    45%{ transform:scaleX(-1); }
+    70%{ left:55%; top:150px; transform:scaleX(-1); }
+    98%{ transform:scaleX(-1); }
+    100%{ left:-250px; top:420px; transform:scaleX(1); }
+}
+
+.food{
+    position:absolute;
+    width:6px;
+    height:6px;
+    background:#e8d27a;
+    border-radius:50%;
+    z-index:6;
+    animation: sink 4s ease-in forwards;
+    pointer-events:none;
+}
+@keyframes sink{
+    0%{ transform:translateY(0); opacity:1; }
+    100%{ transform:translateY(70vh); opacity:0; }
+}
+
+#controls{
+    position:absolute;
+    top:18px;
+    left:18px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    z-index:50;
+}
+
+.panel{
+    background:var(--panel-bg);
+    border:1px solid var(--panel-border);
+    backdrop-filter: blur(8px);
+    border-radius:14px;
+    padding:10px 14px;
+    color:#eaf6ff;
+    box-shadow:0 4px 18px rgba(0,0,0,.25);
+}
+
+.panel-label{
+    font-size:11px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    opacity:.7;
+    margin-bottom:6px;
+}
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.25);
+    color:#eaf6ff;
+    padding:8px 14px;
+    border-radius:999px;
+    cursor:pointer;
+    font-size:14px;
+    transition:.2s ease;
+    user-select:none;
+}
+.btn:hover{
+    background:rgba(255,255,255,.2);
+    transform:translateY(-1px);
+}
+.btn:active{ transform:translateY(0); }
+
+.btn .dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 8px var(--accent);
+}
+
+#hint{
+    position:absolute;
+    bottom:16px;
+    left:50%;
+    transform:translateX(-50%);
+    color:rgba(255,255,255,.65);
+    font-size:12.5px;
+    z-index:50;
+    background:rgba(0,20,35,.4);
+    padding:6px 14px;
+    border-radius:999px;
+    pointer-events:none;
+    transition:opacity .6s ease;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="background" class="theme-day">
+
+<div class="light"></div>
+<div class="ray" style="left:15%;"></div>
+<div class="ray" style="left:55%; animation-delay:-3s;"></div>
+<div class="ray" style="left:80%; animation-delay:-6s;"></div>
+
+<div class="moon"></div>
+<div class="sun"></div>
+
+<div class="sand"></div>
+
+<div id="controls">
+  <div class="panel">
+    <div class="panel-label">Bối cảnh</div>
+    <button class="btn" id="bgBtn"><span class="dot"></span><span id="bgLabel">Ban ngày</span></button>
+  </div>
+  <div class="panel">
+    <div class="panel-label">Âm thanh</div>
+    <button class="btn" id="soundBtn"><span class="dot" id="soundDot"></span><span id="soundLabel">Tắt tiếng</span></button>
+  </div>
+</div>
+
+<div id="hint">Nhấp vào hồ để rắc thức ăn cho cá 🐟</div>
+
+</div>
+
+<script>
+(function(){
+
+const stage = document.getElementById('background');
+
+const FISH_IMAGES = [
+    'Image/fish1.png',
+    'Image/fish5.png',
+    'Image/fish4.png'
+];
+
+const fishCount = 26;
+for(let i=0;i<fishCount;i++){
+    const fish = document.createElement('div');
+    fish.className = 'fish';
+    const size = 60 + Math.random()*50;
+    const top = 8 + Math.random()*72;
+    const duration = 9 + Math.random()*16;
+    const delay = -Math.random()*duration;
+    const src = FISH_IMAGES[i % FISH_IMAGES.length];
+    fish.style.width = size+'px';
+    fish.style.top = top+'%';
+    fish.style.animationDuration = duration+'s';
+    fish.style.animationDelay = delay+'s';
+    fish.innerHTML = `<img src="${src}" alt="cá">`;
+    stage.appendChild(fish);
+}
+
+const jellyCount = 4;
+for(let i=0;i<jellyCount;i++){
+    const jelly = document.createElement('div');
+    jelly.className = 'jelly';
+    const size = 34 + Math.random()*20;
+    jelly.style.left = (8 + Math.random()*84)+'%';
+    jelly.style.top = (10 + Math.random()*30)+'%';
+    jelly.style.width = size+'px';
+    jelly.style.height = (size*1.4)+'px';
+    jelly.style.animationDuration = (6+Math.random()*4)+'s';
+    jelly.innerHTML = `<div class="dome"></div><div class="tentacles"><span></span><span></span><span></span><span></span></div>`;
+    stage.appendChild(jelly);
+}
+
+const shark = document.createElement('div');
+shark.id = 'shark';
+shark.innerHTML = `<img src="Image/shark.png" width="250" alt="cá mập">`;
+stage.appendChild(shark);
+
+for(let i=0;i<60;i++){
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = Math.random()*100+'%';
+    star.style.top = Math.random()*55+'%';
+    star.style.animationDelay = (Math.random()*3)+'s';
+    stage.appendChild(star);
+}
+
+function spawnBubble(x){
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    const size = 8 + Math.random()*16;
+    bubble.style.width = size+'px';
+    bubble.style.height = size+'px';
+    bubble.style.left = (x!==undefined ? x : Math.random()*100+'%');
+    if (x===undefined) bubble.style.left = Math.random()*100+'%';
+    else bubble.style.left = x+'px';
+    const duration = 5 + Math.random()*5;
+    bubble.style.animationDuration = duration+'s';
+    stage.appendChild(bubble);
+    setTimeout(()=>bubble.remove(), duration*1000+200);
+}
+setInterval(()=>spawnBubble(), 550);
+for(let i=0;i<10;i++) spawnBubble();
+
+const seaweedSpots = [5,12,20,30,45,58,70,82,92];
+seaweedSpots.forEach((left,i)=>{
+    const w = document.createElement('div');
+    w.className='seaweed';
+    w.style.left = left+'%';
+    w.style.height = (140+ (i%3)*20)+'px';
+    w.style.animationDuration = (2.4 + Math.random())+'s';
+    stage.insertBefore(w, stage.querySelector('.sand'));
+});
+
+const coralSpots = [
+    [8,'red'], [18,'orange'], [32,'purple'], [52,'red'], [68,'orange'], [88,'purple'], [40,'pink'], [96,'pink']
+];
+coralSpots.forEach(([left,cls])=>{
+    const c = document.createElement('div');
+    c.className = 'coral '+cls;
+    c.style.left = left+'%';
+    stage.insertBefore(c, stage.querySelector('.sand'));
+});
+
+const starfishSpots = [25,63,78];
+starfishSpots.forEach(left=>{
+    const s = document.createElement('div');
+    s.className='starfish';
+    s.style.left = left+'%';
+    s.style.animationDelay = Math.random()+'s';
+    stage.insertBefore(s, stage.querySelector('.sand'));
+});
+
+const themes = [
+    {cls:'theme-day', label:'Ban ngày'},
+    {cls:'theme-sunset', label:'Hoàng hôn'},
+    {cls:'theme-night', label:'Ban đêm'}
+];
+let themeIndex = 0;
+const bgBtn = document.getElementById('bgBtn');
+const bgLabel = document.getElementById('bgLabel');
+
+bgBtn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    themes.forEach(t=>stage.classList.remove(t.cls));
+    themeIndex = (themeIndex+1) % themes.length;
+    stage.classList.add(themes[themeIndex].cls);
+    bgLabel.textContent = themes[themeIndex].label;
+});
+let audioCtx = null;
+let currentSoundNodes = [];
+let soundIndex = -1;
+
+const soundModes = [
+    {label:'Tắt tiếng'},
+    {label:'Bong bóng'},
+    {label:'Sóng biển'},
+    {label:'Nhạc nhẹ'}
+];
+function ensureCtx(){
+    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+function stopCurrentSound(){
+    currentSoundNodes.forEach(n=>{
+        try{ n.stop && n.stop(); }catch(e){}
+        try{ n.disconnect && n.disconnect(); }catch(e){}
+    });
+    currentSoundNodes = [];
+}
+
+function startBubbleSound(){
+    const master = audioCtx.createGain();
+    master.gain.value = 0.18;
+    master.connect(audioCtx.destination);
+    currentSoundNodes.push(master);
+
+    function pop(){
+        if(soundIndex !== 1) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        const freq = 500 + Math.random()*900;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(freq*1.8, audioCtx.currentTime+0.08);
+        gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime+0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+0.15);
+        osc.connect(gain);
+        gain.connect(master);
+        osc.start();
+        osc.stop(audioCtx.currentTime+0.16);
+        setTimeout(pop, 180 + Math.random()*420);
+    }
+    pop();
+}
+
+function startWaveSound(){
+    const bufferSize = 2*audioCtx.sampleRate;
+    const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = noiseBuffer.getChannelData(0);
+    for(let i=0;i<bufferSize;i++) data[i] = Math.random()*2-1;
+
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = noiseBuffer;
+    noise.loop = true;
+
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 500;
+
+    const lfo = audioCtx.createOscillator();
+    lfo.frequency.value = 0.15;
+    const lfoGain = audioCtx.createGain();
+    lfoGain.gain.value = 300;
+    lfo.connect(lfoGain);
+    lfoGain.connect(filter.frequency);
+
+    const gain = audioCtx.createGain();
+    gain.gain.value = 0.25;
+
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    noise.start();
+    lfo.start();
+
+    currentSoundNodes.push(noise, filter, lfo, lfoGain, gain);
+}
+
+function startMusicSound(){
+    const master = audioCtx.createGain();
+    master.gain.value = 0.12;
+    master.connect(audioCtx.destination);
+    currentSoundNodes.push(master);
+
+    const notes = [261.6, 329.6, 392.0, 523.3];
+    notes.forEach((freq,i)=>{
+        const osc = audioCtx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        const g = audioCtx.createGain();
+        g.gain.value = 0;
+        osc.connect(g);
+        g.connect(master);
+        osc.start();
+
+        const lfo = audioCtx.createOscillator();
+        lfo.frequency.value = 0.08 + i*0.02;
+        const lfoGain = audioCtx.createGain();
+        lfoGain.gain.value = 0.05;
+        lfo.connect(lfoGain);
+        lfoGain.connect(g.gain);
+        g.gain.value = 0.05;
+        lfo.start();
+
+        currentSoundNodes.push(osc, g, lfo, lfoGain);
+    });
+}
+
+const soundBtn = document.getElementById('soundBtn');
+const soundLabel = document.getElementById('soundLabel');
+const soundDot = document.getElementById('soundDot');
+
+let modeIdx = 0;
+soundBtn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    ensureCtx();
+    stopCurrentSound();
+    modeIdx = (modeIdx+1) % soundModes.length;
+    soundIndex = modeIdx;
+    soundLabel.textContent = soundModes[modeIdx].label;
+    soundDot.style.background = modeIdx===0 ? 'rgba(255,255,255,.4)' : 'var(--accent)';
+    soundDot.style.boxShadow = modeIdx===0 ? 'none' : '0 0 8px var(--accent)';
+
+    if(modeIdx===1) startBubbleSound();
+    else if(modeIdx===2) startWaveSound();
+    else if(modeIdx===3) startMusicSound();
+});
+let hintShown = true;
+stage.addEventListener('click', (e)=>{
+    const rect = stage.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    for(let i=0;i<4;i++){
+        const food = document.createElement('div');
+        food.className = 'food';
+        food.style.left = (x + (Math.random()*20-10))+'px';
+        food.style.top = (Math.random()*10)+'px';
+        food.style.animationDelay = (Math.random()*0.5)+'s';
+        stage.appendChild(food);
+        setTimeout(()=>food.remove(), 4500);
+    }
+    if(hintShown){
+        document.getElementById('hint').style.opacity = '0';
+        hintShown = false;
+    }
+});
+
+})();
+</script>
+
+</body>
+</html>

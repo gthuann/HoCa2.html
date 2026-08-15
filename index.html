@@ -195,12 +195,6 @@ body{
     100%{ transform:translateY(-110vh) translateX(-10px); opacity:0; }
 }
 
-/*==========================
-      Cá (ảnh do người dùng tự chèn)
-      Vị trí do JS điều khiển trực tiếp (left/top),
-      luôn bị giới hạn trong khung hồ, không bơi ra ngoài.
-==========================*/
-
 .fish{
     position:absolute;
     z-index:6;
@@ -213,7 +207,6 @@ body{
     transform-origin:center;
 }
 
-/* hiệu ứng "đớp mồi" khi cá tới nơi có thức ăn */
 .fish.chomp img{
     animation: chompPulse .3s ease;
 }
@@ -223,7 +216,6 @@ body{
     100%{ transform:scale(1); }
 }
 
-/* vụn thức ăn bắn ra khi cá đớp mồi */
 .crumb{
     position:absolute;
     width:5px;
@@ -421,20 +413,15 @@ body{
 
 const stage = document.getElementById('background');
 
-/* ============================================================
-   HỆ THỐNG CÁ — di chuyển bằng JS, luôn bị giới hạn trong hồ,
-   và biết bơi tới ăn khi có thức ăn rơi xuống.
-============================================================ */
-
 const FISH_IMAGES = [
     'image/fish1.png',
     'image/fish5.png',
     'image/fish4.png'
 ];
 
-const SAND_HEIGHT = 130;      // vùng cát ở đáy, cá không bơi vào đây
-const TOP_MARGIN = 15;        // khoảng cách an toàn phía trên
-const SIDE_MARGIN = 4;        // khoảng cách an toàn 2 bên
+const SAND_HEIGHT = 130;
+const TOP_MARGIN = 15;
+const SIDE_MARGIN = 4;
 
 let stageRect = stage.getBoundingClientRect();
 window.addEventListener('resize', ()=>{ stageRect = stage.getBoundingClientRect(); });
@@ -463,9 +450,9 @@ for(let i=0;i<fishCount;i++){
         x: SIDE_MARGIN + Math.random()*(maxX-SIDE_MARGIN),
         y: TOP_MARGIN + Math.random()*(maxY-TOP_MARGIN),
         dir: Math.random() < 0.5 ? 1 : -1,
-        speed: 35 + Math.random()*45,      // px/giây khi bơi bình thường
-        vy: (Math.random()*14 - 7),        // trôi dọc nhẹ nhàng
-        mode: 'swim',                       // 'swim' | 'eat'
+        speed: 35 + Math.random()*45,
+        vy: (Math.random()*14 - 7),
+        mode: 'swim',
         targetX: 0, targetY: 0
     };
 
@@ -511,7 +498,6 @@ function tick(now){
             const minY = TOP_MARGIN;
             const maxY = Math.max(minY, h - SAND_HEIGHT - f.size*0.55);
 
-            // không cho bơi ra khỏi hồ: chạm biên thì quay đầu
             if(f.x <= minX){ f.x = minX; f.dir = 1; el_flip(f); }
             if(f.x >= maxX){ f.x = maxX; f.dir = -1; el_flip(f); }
             if(f.y <= minY){ f.y = minY; f.vy = Math.abs(f.vy) || 6; }
@@ -552,8 +538,6 @@ function tick(now){
 function el_flip(f){ f.el.style.transform = `scaleX(${f.dir})`; }
 requestAnimationFrame(tick);
 
-/* ============ SỨA ============ */
-
 const jellyCount = 4;
 for(let i=0;i<jellyCount;i++){
     const jelly = document.createElement('div');
@@ -568,14 +552,11 @@ for(let i=0;i<jellyCount;i++){
     stage.appendChild(jelly);
 }
 
-/* ============ CÁ MẬP ============ */
 
 const shark = document.createElement('div');
 shark.id = 'shark';
 shark.innerHTML = `<img src="./image/shark.png" width="250" alt="cá mập">`;
 stage.appendChild(shark);
-
-/* ============ SAO (ban đêm) ============ */
 
 for(let i=0;i<60;i++){
     const star = document.createElement('div');
@@ -585,8 +566,6 @@ for(let i=0;i<60;i++){
     star.style.animationDelay = (Math.random()*3)+'s';
     stage.appendChild(star);
 }
-
-/* ============ BONG BÓNG NỀN (trang trí, không phải thức ăn) ============ */
 
 function spawnBubble(x){
     const bubble = document.createElement('div');
@@ -602,8 +581,6 @@ function spawnBubble(x){
 }
 setInterval(()=>spawnBubble(), 550);
 for(let i=0;i<10;i++) spawnBubble();
-
-/* ============ RONG BIỂN & SAN HÔ & SAO BIỂN ============ */
 
 const seaweedSpots = [5,12,20,30,45,58,70,82,92];
 seaweedSpots.forEach((left,i)=>{
@@ -634,8 +611,6 @@ starfishSpots.forEach(left=>{
     stage.insertBefore(s, stage.querySelector('.sand'));
 });
 
-/* ============ NÚT ĐỔI BỐI CẢNH ============ */
-
 const themes = [
     {cls:'theme-day', label:'Ban ngày'},
     {cls:'theme-sunset', label:'Hoàng hôn'},
@@ -652,8 +627,6 @@ bgBtn.addEventListener('click', (e)=>{
     stage.classList.add(themes[themeIndex].cls);
     bgLabel.textContent = themes[themeIndex].label;
 });
-
-/* ============ ÂM THANH (Web Audio API - tổng hợp, không cần file) ============ */
 
 let audioCtx = null;
 let currentSoundNodes = [];
@@ -788,8 +761,6 @@ soundBtn.addEventListener('click', (e)=>{
     else if(modeIdx===3) startMusicSound();
 });
 
-/* ============ CHO CÁ ĂN (click vào hồ) ============ */
-
 let hintShown = true;
 stage.addEventListener('click', (e)=>{
     const rect = stage.getBoundingClientRect();
@@ -797,7 +768,6 @@ stage.addEventListener('click', (e)=>{
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    // hạt thức ăn rơi xuống chỗ click
     const foodTargetY = Math.min(y + 40, rect.height - SAND_HEIGHT - 20);
     const food = document.createElement('div');
     food.className = 'food';
@@ -809,7 +779,6 @@ stage.addEventListener('click', (e)=>{
         food.style.top = foodTargetY+'px';
     });
 
-    // gọi 1-2 con cá gần nhất bơi tới ăn
     const hungry = fishList
         .filter(f => f.mode === 'swim')
         .map(f => ({ f, d: Math.hypot(f.x - x, f.y - foodTargetY) }))
